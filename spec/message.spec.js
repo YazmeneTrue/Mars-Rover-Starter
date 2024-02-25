@@ -20,6 +20,6 @@ describe("Message class", function() {
         const testName = 'Test Name';
         const testCommands = ['command1', 'command2'];
         const message = new Message(testName, testCommands);
-        expect(message.commands).toEqual(testCommands);
+        expect(message.commands).toBe(testCommands);
       });
  });
