@@ -26,10 +26,33 @@ describe("Rover class", function() {
     test("response returned by receiveMessage includes two results if two commands are sent in the message", function(){
         const messageName = 'Test Name';
         const testCommands = [new Command('command1','value1'),
-    new Command('command2','value2')]
+                             new Command('command2','value2')]
         const message = new Message(messageName, testCommands);
         const rover = new Rover(999);
         const response = rover.receiveMessage(message);
         expect(response.results.length).toBe(2);
+      });
+      test("responds correctly to the status check command",function(){
+        const messageName = 'Test Name';
+        const testCommands = [new Command('STATUS_CHECK')];
+        const message = new Message(messageName,testCommands);
+        const rover = new Rover(87382098, 'NORMAL', 110);
+        const response = rover.receiveMessage(message);
+
+        expect(response.results[0].completed).toBe(true);
+        expect(response.results[0].roverStatus.mode).toBe('NORMAL');
+        expect(response.results[0].roverStatus.generatorWatts).toBe(110);
+        expect(response.results[0].roverStatus.position).toBe(87382098);
+      });
+      test("responds with a false completed value when attempting to move in LOW_POWER mode",function(){
+        const messageName = 'Test Name';
+        const testCommands =  [new Command('LOW_POWER',999)];
+        const message = new Message(messageName,testCommands);
+        const rover = new Rover(111, 'LOW_POWER');
+        const response = rover.receiveMessage(message);
+
+        expect(response.results.length).toBe(1);
+        expect(response.results[0].completed).toBe(false);
+        expect(rover.position).toBe(111);
       });
 });
