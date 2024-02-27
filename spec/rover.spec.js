@@ -55,4 +55,16 @@ describe("Rover class", function() {
         expect(response.results[0].completed).toBe(false);
         expect(rover.position).toBe(111);
       });
+      test("responds with the position for the move command",function(){
+        const messageName = 'Test Name';
+        const testCommands = [new Command('MOVE', 111)];
+        const message = new Message(messageName, testCommands);
+        const rover = new Rover(100);
+        const response = rover.receiveMessage(message);
+ 
+        expect(response.results[0].completed).toBe(true);
+        expect(rover.position).toBe(111);
+        
+
+      })
 });
